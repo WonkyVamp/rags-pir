@@ -1,0 +1,208 @@
+# Server Configuration
+server:
+  host: "0.0.0.0"
+  port: 8000
+  reload: true
+  workers: 4
+  timeout: 60
+  keepalive: 5
+  backlog: 2048
+
+# Database Configuration
+database:
+  type: "mongodb"
+  host: "localhost"
+  port: 27017
+  name: "fraud_detection"
+  username: "admin"
+  password: "your_secure_password"
+  min_pool_size: 5
+  max_pool_size: 20
+  connection_timeout: 5000
+  max_idle_time: 300000
+
+# Redis Configuration
+redis:
+  url: "redis://localhost:6379/0"
+  pool_size: 20
+  timeout: 10
+  retry_attempts: 3
+  retry_delay: 1
+
+# OpenAI Configuration
+openai:
+  api_key: "your_openai_api_key"
+  model: "gpt-4"
+  temperature: 0.7
+  max_tokens: 1000
+  timeout: 30
+  retry_attempts: 3
+  rate_limit_rpm: 60
+
+# Authentication
+auth:
+  secret_key: "your_jwt_secret_key"
+  token_expire_minutes: 60
+  refresh_token_expire_days: 7
+  password_hash_algorithm: "bcrypt"
+  excluded_paths:
+    - "/health"
+    - "/version"
+    - "/docs"
+    - "/redoc"
+    - "/openapi.json"
+
+# CORS Settings
+cors:
+  allowed_origins:
+    - "http://localhost:3000"
+    - "https://your-frontend-domain.com"
+  allowed_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+  allow_credentials: true
+  max_age: 3600
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "{time} {level} {method} {path} {status_code} {duration}ms"
+  file_path: "logs/fraud_detection.log"
+  max_size_mb: 100
+  backup_count: 10
+  include_request_body: true
+  mask_sensitive_data: true
+
+# Rate Limiting
+rate_limits:
+  default:
+    requests_per_minute: 60
+    burst_limit: 100
+    timeout: 60
+
+  "/api/v1/transactions":
+    requests_per_minute: 30
+    burst_limit: 50
+    timeout: 60
+
+  "/api/v1/analysis":
+    requests_per_minute: 20
+    burst_limit: 30
+    timeout: 60
+
+# Audit Configuration
+audit:
+  retention_days: 365
+  batch_size: 100
+  flush_interval: 60
+  storage_path: "audit_logs/"
+  include_user_agent: true
+  include_ip: true
+  sensitive_fields:
+    - "password"
+    - "credit_card"
+    - "ssn"
+
+# SMTP Configuration
+smtp:
+  host: "smtp.gmail.com"
+  port: 587
+  username: "your_email@gmail.com"
+  password: "your_email_password"
+  use_tls: true
+  from_email: "noreply@yourcompany.com"
+  retry_attempts: 3
+  timeout: 10
+
+# Twilio Configuration
+twilio:
+  account_sid: "your_twilio_account_sid"
+  auth_token: "your_twilio_auth_token"
+  phone_number: "your_twilio_phone_number"
+  verify_service_sid: "your_verify_service_sid"
+  retry_attempts: 3
+
+# API Configuration
+api:
+  version: "v1"
+  include_metadata: true
+  timeout: 30
+  max_page_size: 100
+  default_page_size: 20
+  enable_compression: true
+
+# Risk Scoring Configuration
+risk_scoring:
+  high_threshold: 0.8
+  medium_threshold: 0.5
+  low_threshold: 0.2
+  factors:
+    transaction_amount: 0.3
+    location: 0.2
+    time_pattern: 0.15
+    device: 0.15
+    history: 0.2
+
+# Notification Templates
+notification_templates:
+  high_risk_alert:
+    subject: "High Risk Transaction Detected"
+    content: "templates/high_risk_alert.html"
+    variables:
+      - "customer_name"
+      - "transaction_amount"
+      - "risk_score"
+    priority: "high"
+
+  suspicious_pattern:
+    subject: "Suspicious Pattern Detected"
+    content: "templates/suspicious_pattern.html"
+    variables:
+      - "pattern_type"
+      - "transactions"
+      - "risk_level"
+    priority: "medium"
+
+  account_locked:
+    subject: "Account Security Alert"
+    content: "templates/account_locked.html"
+    variables:
+      - "customer_name"
+      - "reason"
+      - "contact_support"
+    priority: "critical"
+
+# Monitoring Configuration
+monitoring:
+  enable_metrics: true
+  prometheus_port: 9090
+  statsd:
+    host: "localhost"
+    port: 8125
+    prefix: "fraud_detection"
+  health_check_interval: 60
+  alert_thresholds:
+    cpu_usage: 80
+    memory_usage: 85
+    error_rate: 0.05
+
+# Feature Flags
+features:
+  enable_ml_models: true
+  enable_real_time_alerts: true
+  enable_pattern_detection: true
+  enable_device_fingerprinting: true
+  enable_location_analysis: true
+  enable_behavioral_analysis: true
+
+# Cache Configuration
+cache:
+  type: "redis"
+  default_ttl: 3600
+  patterns:
+    customer_profile: 1800
+    risk_score: 300
+    transaction_history: 600
+  max_size: 1000000
